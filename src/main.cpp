@@ -4,7 +4,7 @@
 #include <QtWidgets/QLabel>
 
 #include <boost/shared_ptr.hpp>
-//#include <boost/python.hpp>
+#include <boost/python.hpp>
 
 
 int main(int argc, char *argv[])

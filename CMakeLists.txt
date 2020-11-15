@@ -10,11 +10,15 @@ set(CMAKE_AUTORCC ON)
 
 set(Boost_USE_STATIC_LIBS ON)
 
+set(CMAKE_SHARED_MODULE_PREFIX "")
+
 find_package(Qt5Widgets REQUIRED)
 find_package(Boost REQUIRED)
+find_package(PythonLibs 3 REQUIRED)
+
 
 add_executable(hello src/main.cpp)
 
-target_include_directories(hello PUBLIC ${Boost_INCLUDE_DIRS})
+target_include_directories(hello PUBLIC ${Boost_INCLUDE_DIRS} PRIVATE ${PYTHON_INCLUDE_DIRS})
 
-target_link_libraries(hello Qt5::Widgets)
+target_link_libraries(hello Qt5::Widgets ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
