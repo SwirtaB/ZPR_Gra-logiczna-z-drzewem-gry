@@ -1,2 +1,10 @@
 cmake-build*
 .idea
+
+#folders
+bin/
+build/
+tests/
+
+#documentation
+doc/

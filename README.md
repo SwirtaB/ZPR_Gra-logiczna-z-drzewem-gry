@@ -14,3 +14,12 @@ cmake ..
 cmake --build .
 ./Debug/hello.exe
 ```
+## Generowanie testow
+```
+Ustaw flage w CMakeLists.txt
+
+set(BUILD_TESTS True)
+
+cmake --build 
+./build/tests
+```
