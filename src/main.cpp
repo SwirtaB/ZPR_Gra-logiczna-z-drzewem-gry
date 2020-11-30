@@ -1,4 +1,5 @@
 #include <string>
+#include <fstream>
 
 #include <boost/python.hpp>
 
@@ -13,17 +14,19 @@ int main(int argc, char *argv[])
     py::object main_module = py::import("__main__");
     py::object main_namespace = main_module.attr("__dict__");
     bool worked = false;
-    char *res;
+    char *res = "fail";
     try {
-        py::object noneType = py::exec("a = \"hello\"", main_namespace);
-        res = py::extract<char*>(main_namespace["a"]);
+        std::ifstream ifs("config.py");
+        std::string script((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+        py::object noneType = py::exec(script.c_str(), main_namespace);
+        res = py::extract<char*>(main_namespace["text"]);
         worked = true;
     } catch (py::error_already_set const &) {
         PyErr_Print();
     }
 
     QApplication app(argc, argv);
-    QLabel *label = worked ? new QLabel(res) : new QLabel("ohno");
+    QLabel *label = new QLabel(res);
     label->setFixedSize(200, 200);
     label->setAlignment(Qt::AlignmentFlag::AlignCenter);
     label->show();

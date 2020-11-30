@@ -1,25 +1,32 @@
 # ZPR_Gra-logiczna-z-drzewem-gry
 
 ## Wymagania
-- Biblioteka Qt5 wykrywana przez CMake
-- Biblioteka Boost (1.72.0) wykrywana przez CMake
-- Python (3.8.x) wykrywany przez CMake
-- Biblioteki dynamiczne Qt i Boost.Python uzyte do budowy w PATH
+#### Linux
+- Biblioteki Qt5 i Boost (1.71+) wykrywane przez CMake
+- Python (3.8+) wykrywany przez CMake
+#### Windows
+- Biblioteki Qt5 i Boost wykrywane przez kompilator (np. vcpkg zintegrowane z MSBuild)
+- Python (3.8+) wykrywany przez CMake
 
 ## Budowanie i uruchomienie
+Budowanie:
 ```
 mkdir cmake-build
 cd cmake-build
 cmake ..
 cmake --build .
-./Debug/hello.exe
+cd ..
 ```
-## Generowanie testow
+Uruchomienie:
 ```
-Ustaw flage w CMakeLists.txt
-
+./bin/Debug/hello.exe
+```
+## Generowanie i uruchomienie testow
+Flaga BUILD_TESTS w CMakeLists.txt kontroluje uruchamianie testów przy budowie
+```
 set(BUILD_TESTS True)
-
-cmake --build 
-./build/tests
+```
+Po zbudowaniu z flaga BUILD_TESTS:
+```
+./build/Debug/tests.exe
 ```
