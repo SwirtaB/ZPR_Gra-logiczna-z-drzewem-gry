@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     bool worked = false;
     char *res = "fail";
     try {
-        std::ifstream ifs("../config.py");
+        std::ifstream ifs("config.py");
         std::string script((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
         py::object noneType = py::exec(script.c_str(), main_namespace);
         res = py::extract<char*>(main_namespace["text"]);
