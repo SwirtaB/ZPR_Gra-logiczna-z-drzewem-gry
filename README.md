@@ -18,8 +18,13 @@ cmake --build .
 cd ..
 ```
 Uruchomienie:
+#### Windows
 ```
 ./bin/Debug/hello.exe
+```
+#### Linux
+```
+./bin/hello
 ```
 ## Generowanie i uruchomienie testow
 Flaga BUILD_TESTS w CMakeLists.txt kontroluje uruchamianie testów przy budowie
@@ -27,6 +32,11 @@ Flaga BUILD_TESTS w CMakeLists.txt kontroluje uruchamianie testów przy budowie
 set(BUILD_TESTS True)
 ```
 Po zbudowaniu z flaga BUILD_TESTS:
+#### Windows
 ```
 ./build/Debug/tests.exe
+```
+#### Linux
+```
+./build/tests
 ```
