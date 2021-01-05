@@ -60,6 +60,13 @@ bool GameField::circle_field(int x, int y) {
     fieldArray[it].circle();
     return true;
 }
+bool GameField::empty_field(int x, int y) {
+    if(!in_range(0,3,x) || !in_range(0,3,y))
+        return false;
+    int it = 3*y + x;
+    fieldArray[it].empty();
+    return true;
+}
 FieldStateEnum GameField::get_field_state(int x, int y) {
     if(!in_range(0,3,x) || !in_range(0,3,y))
         return FIELD_STATE_ERROR;

@@ -20,6 +20,7 @@ struct Config {
     ConfigStart start;
     ConfigBotTactic bot_tactic;
     ConfigUiSize ui_size;
+    int depth;
 
     static std::optional<Config> try_from_script(const char* config_string);
 };

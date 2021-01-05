@@ -51,6 +51,9 @@ std::optional<Config> Config::try_from_script(const char* config_str) {
         } else {
             return std::optional<Config>();
         }
+        if(config.bot_tactic == GAME_TREE){
+            config.depth = py::extract<int>(main_namespace["depth"]);
+        }
 
         return std::optional<Config>(config);
 

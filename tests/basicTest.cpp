@@ -55,6 +55,7 @@ BOOST_AUTO_TEST_CASE(game_test) {
     testQueuesHandler->messageQueue.push(InputMessage(INPUT, 0, 0));
     testQueuesHandler->messageQueue.push(InputMessage(INPUT, 0, 2));
     testQueuesHandler->messageQueue.push(InputMessage(INPUT, 2, 2));
+    testQueuesHandler->messageQueue.push(InputMessage(EXIT, 0, 0));
     game.start();
     auto tmp = testQueuesHandler->gameStateQueue.back();
     BOOST_CHECK_EQUAL(tmp.first, CIRCLE_WON);

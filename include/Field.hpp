@@ -31,6 +31,7 @@ public:
     void reset_game_fields();
     bool cross_field(int x, int y);
     bool circle_field(int x, int y);
+    bool empty_field(int x, int y);
     FieldStateEnum get_field_state(int x, int y);
 };
 

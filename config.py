@@ -7,7 +7,8 @@ ui_size = "small"/"medium"/"large"
 
 """
 cross_is_bot = False
-circle_is_bot = False
+circle_is_bot = True
 start = "cross"
-bot_tactic = "heuristic"
+bot_tactic = "game tree"
 ui_size = "medium"
+depth = 10
