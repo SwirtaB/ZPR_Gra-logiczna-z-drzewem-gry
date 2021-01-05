@@ -479,10 +479,10 @@ int Model::minimax(int x, int y, int depth, int alpha, int beta, GameField gameF
                         gameField.circle_field(x, y);
                         score = minimax(x, y, depth - 1, alpha, beta, gameField, CROSS_PLAYER);
                         gameField.empty_field(x, y);
+                        bestScore = std::min(score, bestScore);
                         //alpha-beta pruning (dwie linie)
                         beta = std::min(beta, score);
                         if(beta <= alpha) return bestScore;
-                        bestScore = std::min(score, bestScore);
                     }
                 }
             }
@@ -495,10 +495,10 @@ int Model::minimax(int x, int y, int depth, int alpha, int beta, GameField gameF
                         gameField.cross_field(x, y);
                         score = minimax(x, y, depth - 1, alpha, beta, gameField, CIRCLE_PLAYER);
                         gameField.empty_field(x, y);
+                        bestScore = std::max(score, bestScore);
                         //alpha-beta pruning (dwie linie)
                         alpha = std::max(alpha, score);
                         if(beta <= alpha) return bestScore;
-                        bestScore = std::max(score, bestScore);
                     }
                 }
             }
