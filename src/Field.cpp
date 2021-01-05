@@ -4,6 +4,8 @@
 
 #include "../include/Field.hpp"
 
+using namespace ox;
+
 bool in_range(int low, int high, int value){
     return (value-low)*(value-high) <= 0;
 }

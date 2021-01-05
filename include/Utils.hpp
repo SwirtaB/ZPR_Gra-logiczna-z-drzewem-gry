@@ -5,16 +5,21 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+namespace ox {
+
 enum FieldStateEnum{
     EMPTY, CIRCLED, CROSSED, FIELD_STATE_ERROR
 };
 enum GameStateEnum{
-    PREPARING, PLAYING, CIRCLE_WON, CROSS_WON, GAME_STATE_ERROR
+    PREPARING, PLAYING, CIRCLE_WON, CROSS_WON, TIE, GAME_STATE_ERROR
 };
 enum PlayerEnum{
     CIRCLE_PLAYER, CROSS_PLAYER, NONE
 };
 enum MessageTypeEnum{
-    RESET_GAME, INPUT, MESSAGE_ERROR
+    EXIT, RESET_GAME, INPUT
 };
+
+}
+
 #endif //UTILS_HPP

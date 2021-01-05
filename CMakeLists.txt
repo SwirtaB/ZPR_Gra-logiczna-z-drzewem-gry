@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.17)
 project(ZPR_gldg)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+include(FetchContent)
+FetchContent_Declare(mahi-gui GIT_REPOSITORY https://github.com/mahilab/mahi-gui.git) 
+FetchContent_MakeAvailable(mahi-gui)
 
 if (WIN32)
     find_package(Python 3.8 REQUIRED)
@@ -13,7 +16,6 @@ elseif (UNIX)
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTORCC ON)
 
-    find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
     find_package(Boost 1.71.0 REQUIRED COMPONENTS python38)
     find_package(Python 3.8 REQUIRED)
     find_package(PythonLibs 3.8 REQUIRED)
@@ -35,7 +37,7 @@ if (WIN32)
     target_link_libraries(${EXECUTABLE_NAME} ${PYTHON_LIBRARIES})
 elseif (UNIX)
     target_include_directories(${EXECUTABLE_NAME} PRIVATE ${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
-    target_link_libraries(${EXECUTABLE_NAME} Qt5::Widgets Boost::python38 ${PYTHON_LIBRARIES})
+    target_link_libraries(${EXECUTABLE_NAME} mahi::gui Boost::python38 ${PYTHON_LIBRARIES})
 endif ()
 
 
@@ -55,10 +57,10 @@ if(BUILD_TESTS)
 
     if (WIN32)
         target_include_directories(tests PRIVATE ${PYTHON_INCLUDE_DIRS})
-        target_link_libraries(tests ${PYTHON_LIBRARIES})
+        target_link_libraries(tests mahi::gui ${PYTHON_LIBRARIES})
     elseif (UNIX)
         target_include_directories(tests PRIVATE ${PYTHON_INCLUDE_DIRS})
-        target_link_libraries(tests Boost::python38 ${PYTHON_LIBRARIES} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+        target_link_libraries(tests mahi::gui Boost::python38 ${PYTHON_LIBRARIES} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
     endif ()
 
     add_test(UnitTest tests)

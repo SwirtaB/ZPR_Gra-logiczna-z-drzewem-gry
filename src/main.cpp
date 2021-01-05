@@ -1,35 +1,37 @@
 #include <string>
 #include <fstream>
+#include <optional>
+#include <iostream>
+#include <thread>
 
-#include <boost/python.hpp>
+#include "../include/View.hpp"
+#include "../include/Model.hpp"
+#include "../include/Queues.hpp"
+#include "../include/Config.hpp"
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QLabel>
+using namespace ox;
 
-namespace py = boost::python;
-
-int main(int argc, char *argv[])
-{
-    Py_Initialize();
-    py::object main_module = py::import("__main__");
-    py::object main_namespace = main_module.attr("__dict__");
-    bool worked = false;
-    char *res = "fail";
-    try {
-        std::ifstream ifs("config.py");
-        std::string script((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-        py::object noneType = py::exec(script.c_str(), main_namespace);
-        res = py::extract<char*>(main_namespace["text"]);
-        worked = true;
-    } catch (py::error_already_set const &) {
-        PyErr_Print();
+int main(int argc, char *argv[]) {
+    std::ifstream ifs("config.py");
+    std::string config_string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    std::optional<Config> o_config = Config::try_from_script(config_string.c_str());
+    if (!o_config) {
+        std::cerr << "Config error!" << std::endl;
+        return 1;
     }
 
-    QApplication app(argc, argv);
-    QLabel *label = new QLabel(res);
-    label->setFixedSize(200, 200);
-    label->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    label->show();
-    int code = app.exec();
-    return code;
+    std::shared_ptr<Queues> message_queues = std::make_shared<Queues>();
+
+    Model* model = new Model(o_config.value(), message_queues);
+    std::thread model_thread([model]() {
+        model->start();
+    });
+
+    { // w bloku zeby wywolac destruktor view po zakonczeniu view.run()
+        View view(o_config.value(), message_queues);
+        view.run();
+    }
+    
+    model_thread.join();
+    return 0;
 }

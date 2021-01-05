@@ -8,6 +8,8 @@
 #include "Utils.hpp"
 #include <array>
 
+namespace ox {
+
 class Field{
 private:
     FieldStateEnum fieldState;
@@ -31,4 +33,6 @@ public:
     bool circle_field(int x, int y);
     FieldStateEnum get_field_state(int x, int y);
 };
+
+}
 #endif //FIELD_HPP

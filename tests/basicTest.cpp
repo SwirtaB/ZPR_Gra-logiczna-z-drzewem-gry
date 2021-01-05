@@ -8,8 +8,12 @@
 #include <boost/test/test_tools.hpp>
 #include "../include/Model.hpp"
 
+#include <iostream>
+
 #include <boost/python.hpp>
 namespace py = boost::python;
+
+using namespace ox;
 
 BOOST_AUTO_TEST_CASE(dummy_test)
 {
@@ -39,12 +43,18 @@ BOOST_AUTO_TEST_CASE(game_test) {
     std::cout << "---GAME TEST---" << std::endl;
     Queues testQueues;
     std::shared_ptr<Queues> testQueuesHandler = std::make_shared<Queues>(testQueues);
-    Model game(testQueuesHandler);
-    testQueuesHandler->messageQueue.push(InputMessage(INPUT, CIRCLE_PLAYER, 1, 1));
-    testQueuesHandler->messageQueue.push(InputMessage(INPUT, CROSS_PLAYER, 1, 0));
-    testQueuesHandler->messageQueue.push(InputMessage(INPUT, CIRCLE_PLAYER, 0, 0));
-    testQueuesHandler->messageQueue.push(InputMessage(INPUT, CROSS_PLAYER, 0, 2));
-    testQueuesHandler->messageQueue.push(InputMessage(INPUT, CIRCLE_PLAYER, 2, 2));
+
+    Config config;
+    config.start = ConfigStart::CIRCLE;
+    config.circle_is_bot = false;
+    config.cross_is_bot = false;
+
+    Model game(config, testQueuesHandler);
+    testQueuesHandler->messageQueue.push(InputMessage(INPUT, 1, 1));
+    testQueuesHandler->messageQueue.push(InputMessage(INPUT, 1, 0));
+    testQueuesHandler->messageQueue.push(InputMessage(INPUT, 0, 0));
+    testQueuesHandler->messageQueue.push(InputMessage(INPUT, 0, 2));
+    testQueuesHandler->messageQueue.push(InputMessage(INPUT, 2, 2));
     game.start();
     auto tmp = testQueuesHandler->gameStateQueue.back();
     BOOST_CHECK_EQUAL(tmp.first, CIRCLE_WON);
