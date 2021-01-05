@@ -2,10 +2,10 @@
 
 ## Wymagania
 #### Linux
-- Biblioteki Qt5 i Boost (1.71+) wykrywane przez CMake
+- Biblioteka Boost (1.71+) wykrywana przez CMake
 - Python (3.8+) wykrywany przez CMake
 #### Windows
-- Biblioteki Qt5 i Boost wykrywane przez kompilator (np. vcpkg zintegrowane z MSBuild)
+- Biblioteka Boost wykrywana przez kompilator (np. vcpkg zintegrowane z MSBuild)
 - Python (3.8+) wykrywany przez CMake
 
 ## Budowanie i uruchomienie
