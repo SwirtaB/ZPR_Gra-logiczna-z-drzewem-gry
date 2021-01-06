@@ -55,7 +55,9 @@ std::optional<Config> Config::try_from_script(const char* config_str) {
             config.depth = py::extract<int>(main_namespace["depth"]);
         }
 
-        return std::optional<Config>(config);
+        config.save_path = std::string(py::extract<char*>(main_namespace["save_path"]));
+
+        return config;
 
     } catch (py::error_already_set const &) {
         PyErr_Print();

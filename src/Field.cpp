@@ -72,3 +72,62 @@ FieldStateEnum GameField::get_field_state(int x, int y) {
         return FIELD_STATE_ERROR;
     return fieldArray[3*y + x].get_state();
 }
+
+std::optional<GameField> GameField::try_read(std::istream& in) {
+    GameField gd;
+    std::string input;
+    for (int y = 0; y < 3; ++y) {
+        for (int x = 0; x < 3; ++x) {
+            in >> input;
+            if (input.length() != 1) {
+                return std::optional<GameField>();
+            }
+            switch (input[0]) {
+            case '_':
+                gd.empty_field(x, y);
+                break;
+
+            case 'x':
+                gd.cross_field(x, y);
+                break;
+            
+            case 'o':
+                gd.circle_field(x, y);
+                break;
+            
+            default:
+                return std::optional<GameField>();
+            }
+        }
+    }
+    return gd;
+}
+
+void GameField::write(std::ostream& out) {
+    for (int y = 0; y < 3; ++y) {
+        for (int x = 0; x < 3; ++x) {
+            switch (get_field_state(x, y)) {
+            case EMPTY:
+                out << '_';
+                break;
+
+            case CROSSED:
+                out << 'x';
+                break;
+
+            case CIRCLED:
+                out << 'o';
+                break;
+
+            case FIELD_STATE_ERROR:
+                out << 'e';
+                break;
+            }
+
+            if (x != 2 || y != 2) {
+                out << ' ';
+            }
+        }
+        out << '\n';
+    }
+}

@@ -21,6 +21,7 @@ struct Config {
     ConfigBotTactic bot_tactic;
     ConfigUiSize ui_size;
     int depth;
+    std::string save_path;
 
     static std::optional<Config> try_from_script(const char* config_string);
 };

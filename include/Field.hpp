@@ -7,6 +7,8 @@
 
 #include "Utils.hpp"
 #include <array>
+#include <iostream>
+#include <optional>
 
 namespace ox {
 
@@ -33,6 +35,9 @@ public:
     bool circle_field(int x, int y);
     bool empty_field(int x, int y);
     FieldStateEnum get_field_state(int x, int y);
+
+    static std::optional<GameField> try_read(std::istream&);
+    void write(std::ostream&);
 };
 
 }

@@ -18,8 +18,6 @@ private:
     Config config;
     PlayerEnum currentPlayer;
 
-public:
-    Model(Config& config, std::shared_ptr<Queues> queuesHandler_);
     void init();
     InputMessage read_input();
     bool send_state();
@@ -32,8 +30,8 @@ public:
     bool is_finished();
     bool is_playing();
     void play_game();
-    void start();
-    void reset_game();
+    // void reset_game();
+    void exit();
     bool is_waiting_for_player_input();
     //zmodyfikowana
     bool is_board_full(GameField);
@@ -44,6 +42,13 @@ public:
     int estimate_move(GameField, PlayerEnum, int, int);
     /*algorytm budowania i przeszukiwania w glab drzewa gry, zastosowalem optymalizacje, dzieki czemu nie rozpatruje galezi dajacych gorszy wynik*/
     int minimax(int x, int y, int depth_, int alpha, int beta, GameField gameField, PlayerEnum player);
+
+    bool try_load_saved_state();
+    bool try_save_state();
+
+public:
+    Model(Config& config, std::shared_ptr<Queues> queuesHandler_);
+    void start();
 };
 
 }

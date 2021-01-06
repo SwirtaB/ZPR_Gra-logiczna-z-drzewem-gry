@@ -7,6 +7,7 @@
 #include <chrono>
 #include <thread>
 #include <climits>
+#include <fstream>
 
 using namespace ox;
 
@@ -142,26 +143,33 @@ void Model::set_winner(int x, int y) {
 }
 
 bool Model::is_finished() {
-    if(gameState == CIRCLE_WON || gameState == CIRCLE_WON)
+    if(gameState == CIRCLE_WON || gameState == CIRCLE_WON || gameState == TIE)
         return true;
     else return false;
 }
 void Model::start() {
-    init();
+    if (!try_load_saved_state()) {
+        init();
+    }
     gameState = PLAYING;
     send_state();
     play_game();
 }
 
+void Model::exit() {
+    if (gameState == PLAYING) {
+        try_save_state();
+    }
+}
+
 void Model::play_game() {
-    bool exit = false;
-    while (!exit) {
+    bool exit_flag = false;
+    while (!exit_flag) {
         if (is_waiting_for_player_input()) {
             InputMessage message = read_input();
             switch (message.messageType) {
             case EXIT:
-                // tutaj zapis stanu gry
-                exit = true;
+                exit_flag = true;
                 break;
             
             case RESET_GAME:
@@ -185,6 +193,7 @@ void Model::play_game() {
             send_state();
         }
     }
+    exit();
 }
 
 bool Model::is_waiting_for_player_input() {
@@ -506,4 +515,46 @@ int Model::minimax(int x, int y, int depth, int alpha, int beta, GameField gameF
         default: break;
     }
     return bestScore;
+}
+
+bool Model::try_load_saved_state() {
+    try {
+        std::ifstream save(config.save_path);
+        std::optional<GameField> loaded_gf = GameField::try_read(save);
+        if (!loaded_gf.has_value()) {
+            return false;
+        }
+        std::string player;
+        PlayerEnum current_player;
+        save >> player;
+        if (player == "cross") {
+            current_player = CROSS_PLAYER;
+        } else if (player == "circle") {
+            current_player = CIRCLE_PLAYER;
+        } else {
+            return false;
+        }
+
+        gameField = loaded_gf.value();
+        currentPlayer = current_player;
+        gameState = PLAYING;
+        return true;
+    } catch (std::exception& e) {
+        return false;
+    }
+}
+
+bool Model::try_save_state() {
+    try {
+        std::ofstream save(config.save_path);
+        gameField.write(save);
+        if (currentPlayer == CROSS_PLAYER) {
+            save << "cross\n";
+        } else {
+            save << "circle\n";
+        }
+        return true;
+    } catch (std::exception& e) {
+        return false;
+    }
 }

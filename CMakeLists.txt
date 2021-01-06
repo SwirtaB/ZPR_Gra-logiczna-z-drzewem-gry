@@ -34,7 +34,7 @@ add_executable(${EXECUTABLE_NAME} ${TARGET_SRC})
 
 if (WIN32)
     target_include_directories(${EXECUTABLE_NAME} PRIVATE ${PYTHON_INCLUDE_DIRS})
-    target_link_libraries(${EXECUTABLE_NAME} ${PYTHON_LIBRARIES})
+    target_link_libraries(${EXECUTABLE_NAME} mahi::gui ${PYTHON_LIBRARIES})
 elseif (UNIX)
     target_include_directories(${EXECUTABLE_NAME} PRIVATE ${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
     target_link_libraries(${EXECUTABLE_NAME} mahi::gui Boost::python38 ${PYTHON_LIBRARIES})
