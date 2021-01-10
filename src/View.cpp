@@ -1,7 +1,24 @@
+/**
+ * @file View.cpp
+ * @author Maciej Wojno
+ * @brief Zawiera defifnicję metod klasy View
+ * @version 1.0
+ * @date 2021-01-10
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #include "../include/View.hpp"
 
 using namespace ox;
 
+/**
+ * @brief Konstruktor widoku z podaną konfiguracją.
+ * @details Komunikuje się z widokiem za pomocą podanego wspólnego pośrednika.
+ * 
+ * @param config - konifuracja używana przy tworzeniu widoku.
+ * @param messageQueues_ - uchwyt do kolejki komunikatów.
+ */
 View::View(ox::Config &config, std::shared_ptr<MessageQueues> messageQueues_)
     : Application(300, 300, "OX", config.ui_size == RESIZABLE ? true : false), messageQueues(messageQueues_), lastState()
 {
@@ -43,6 +60,11 @@ const int IMGUI_WINDOW_FLAGS =
     IMGUI_NO_SCROLLBAR |
     IMGUI_NO_SCROLL_MOUSE;
 
+/**
+ * @brief Funkcja aktualizacji interfejsu gracza.
+ * @details Jest wykonywana w pętli, ponieważ jest to interfejs typu immidiate mode GUI
+ * 
+ */
 void View::update()
 {
     ImGui::SetNextWindowSize(get_window_size());
@@ -88,10 +110,21 @@ void View::update()
     ImGui::End();
 }
 
+/**
+ * @brief Aktualizacja interfejsu w stanie gry PREPARING. 
+ * @details Wyświetla pust panel.
+ * 
+ */
 void View::update_preparing()
 {
 }
 
+/**
+ * @brief Aktualizacja interfejsu w stanie gry IN_PROGRESS.
+ * @details Wyświetla planszę gry i pozwala graczowi wybierać pole.
+ * 
+ * @param fields - aktualna plansza.
+ */
 void View::update_game_in_progress(FieldBoard &fields)
 {
     ImGui::Columns(3, nullptr, false);
@@ -114,6 +147,12 @@ void View::update_game_in_progress(FieldBoard &fields)
         ImGui::PopID();
 }
 
+/**
+ * @brief Aktualizacja interfejsu w stanie gry FINISHED.
+ * @details Wyświetla informację o zwycięzcy i pozwala wywołac kolejną rozgrywkę.
+ * 
+ * @param player - gracz który wygrał.
+ */
 void View::update_game_finished(PlayerEnum player)
 {
     if (player == CIRCLE_PLAYER && ImGui::Button("Circle won!", get_window_size()) || player == CROSS_PLAYER && ImGui::Button("Cross won!", get_window_size()) || player == NONE && ImGui::Button("Tie!", get_window_size()))
@@ -122,12 +161,24 @@ void View::update_game_finished(PlayerEnum player)
     }
 }
 
+/**
+ * @brief Oblicza współczynnik skalowania tekstu w zależności od rozmiaru okna.
+ * 
+ * @return float - wspołczynnik skalowania tekstu.
+ */
 float View::get_font_scale() const
 {
     float min_dimension = std::min(get_window_size().x, get_window_size().y);
     return min_dimension / 300;
 }
 
+/**
+ * @brief Wyświetla przycisk na planszy w podanym stanie.
+ * 
+ * @param state - aktualna plansza.
+ * @return true - gdy przycisk został poprawnie wyświetlony.
+ * @return false - w przypadku błędu.
+ */
 bool View::field_button(FieldState state) const
 {
     switch (state)
@@ -143,6 +194,10 @@ bool View::field_button(FieldState state) const
     }
 }
 
+/**
+ * @brief Sprawdza czy przyszedł nowy stan od kontrolera.
+ * 
+ */
 void View::check_for_new_state()
 {
     auto state = messageQueues->check_for_game_state();
@@ -152,6 +207,11 @@ void View::check_for_new_state()
     }
 }
 
+/**
+ * @brief Wysyła akcję gracza do kontrolera.
+ * 
+ * @param message - akcja wysyłana do kontrolera.
+ */
 void View::send_player_input(PlayerInputMessage message) const
 {
     messageQueues->send_player_input(message);

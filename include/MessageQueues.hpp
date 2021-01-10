@@ -1,6 +1,14 @@
-//
-// Created by swirta on 29.12.2020.
-//
+/**
+ * @file MessageQueues.hpp
+ * @author Maciej Wojno, Bartosz Świrta.
+ * @brief Zawiera definicję struktur wiadomości GameStateMessage, PlayerInputMessage, oraz klasy 
+ *        agregujacej i zarządającej kolejkami wiadomości MessageQueues.
+ * @version 1.0
+ * @date 2021-01-10
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #pragma once
 
 #include "Field.hpp"
@@ -10,7 +18,10 @@
 
 namespace ox
 {
-    /// Wiadomość wysyłana od kontrolera do widoku.
+    /**
+     * @brief Struktura reprezentująca wiadomość wysyłaną przez kontroler do widoku.
+     * 
+     */
     struct GameStateMessage
     {
         GameStateMessage(GameStateEnum gs, FieldBoard fb)
@@ -20,7 +31,10 @@ namespace ox
         FieldBoard fieldBoard;
     };
 
-    /// Typy wiadomości od widoku do kontrolera.
+    /**
+     * @brief Typy wiadomości od widoku do kontrolera.
+     * 
+     */
     enum PlayerInputMessageType
     {
         EXIT,
@@ -28,7 +42,10 @@ namespace ox
         INPUT
     };
 
-    /// Wiadomość od widoku do kontrolera.
+    /**
+     * @brief Klasa reprezentująca wiadomość wysłąną przez widok do kontrolera.
+     * 
+     */
     class PlayerInputMessage
     {
     public:
@@ -43,23 +60,19 @@ namespace ox
             : messageType(messageType_), x(x_), y(y_) {}
     };
 
-    /// \brief Współdzielony pośrednik komunikacji pomiędzy widokiem a kontrolerem.
-    /// \details
-    /// Widok wysyła tylko PlayerInputMessage i odbiera tylko GameStateMessage.
-    /// Kontroler tylko wysyła tylko GameStateMessage i odbiera tylko PlayerInputMessage.
+    /**
+     * @brief Współdzielony pośrednik komunikacji pomiędzy widokiem a kontrolerem.
+     * @details Widok wysyła tylko PlayerInputMessage i odbiera tylko GameStateMessage.
+     *          Kontroler wysyła tylko GameStateMessage i odbiera tylko PlayerInputMessage.
+     * 
+     */
     class MessageQueues
     {
     public:
-        /// \brief Wysłanie wiadomości o akcji gracza do kolejki.
-        /// \details
-        /// Wkłada do kolejki podaną akcję i sygnalizuje condvar
-        /// czekający na to aż kolejka przestanie być pusta.
+        /// Wysłanie wiadomości o akcji gracza do kolejki.
         void send_player_input(const PlayerInputMessage input);
-        /// \brief Odebranie wiadomości o akcji gracza z kolejki.
-        /// \details
-        /// Jeśli kolejka jest pusta czeka na condvarze aż kolejka nie będzie pusta.
+        /// Odebranie wiadomości o akcji gracza z kolejki.
         const PlayerInputMessage wait_for_player_input();
-
         /// Wysłanie nowego stanu gry do kolejki.
         void send_game_state(const GameStateMessage state);
         /// Wyciągnięcie nowego stanu gry z kolejki stanów gry jeśli nie jest pusta.

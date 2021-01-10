@@ -12,7 +12,7 @@
 
 namespace ox
 {
-    /**
+    /** \enum GameStateEnum
      * @brief Możliwe stany rozgrywki.
      * 
      */
@@ -25,7 +25,7 @@ namespace ox
         TIE,
     };
 
-    /**
+    /** \enum PlayerEnum
      * @brief Konkretny gracz lub jego brak.
      * 
      */

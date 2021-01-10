@@ -1,3 +1,13 @@
+/**
+ * @file Config.cpp
+ * @author Maciej Wojno
+ * @brief Zawiera definicję metody try_from_script.
+ * @version 1.0
+ * @date 2021-01-10
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #include "../include/Config.hpp"
 
 #include <optional>
@@ -10,6 +20,12 @@ namespace py = boost::python;
 
 using namespace ox;
 
+/**
+ * @brief Spróbuj wczytać plik konfiguracyjny z tekstu skryptu python.
+ * 
+ * @param config_str - ciąg znaków z wczytaną konfiguracją
+ * @return std::optional<Config> - zwraca strukturę przechowującą dane konfiguracyjne
+ */
 std::optional<Config> Config::try_from_script(const char *config_str)
 {
     Py_Initialize();

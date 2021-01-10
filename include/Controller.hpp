@@ -1,6 +1,13 @@
-//
-// Created by swirta on 28.12.2020.
-//
+/**
+ * @file Controller.hpp
+ * @author Bartosz Świrta
+ * @brief Zawiera definicję klasy Controller - kontroluje przebieg gry.
+ * @version 1.0
+ * @date 2021-01-10
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #pragma once
 
 #include "../include/MessageQueues.hpp"
@@ -8,15 +15,24 @@
 
 namespace ox
 {
-    /// \brief Kontroler gry.
-    /// Przyjmuje ruchy graczy, wywołuje ruchy botów i rozgrywa grę.
+    /**
+     * @brief Kontroler gry.
+     *        Przyjmuje ruchy graczy, wywołuje ruchy botów i rozgrywa grę.
+     * 
+     */
     class Controller
     {
     public:
-        /// \brief Konstruktor kontrolera z podaną konfiguracją.
-        /// Komunikuje się z widokiem za pomocą podanego wspólnego pośrednika.
+        /**
+         * @brief Konstruktor kontrolera z podaną konfiguracją.
+         *        Komunikuje się z widokiem za pomocą podanego wspólnego pośrednika.
+         * 
+         */
         Controller(Config &config, std::shared_ptr<MessageQueues> queuesHandler_);
-        /// Uruchamia kontroler, przejmuje wątek na czas działania.
+        /**
+         * @brief Uruchamia kontroler, przejmuje wątek na czas działania.
+         * 
+         */
         void run();
 
     private:
@@ -40,7 +56,6 @@ namespace ox
         /// Wyślij obacny stan gry do widoku.
         void send_state() const;
         /// Spróbuj wykonać ruch podanego gracza na danym polu.
-        /// \return Zwraca true jeśli ruch został przyjęty, false jeśli nie.
         bool select_field(int x, int y, PlayerEnum player);
         /// Zamień gracza który będzie teraz wykonywał ruch. 
         void flip_player();
