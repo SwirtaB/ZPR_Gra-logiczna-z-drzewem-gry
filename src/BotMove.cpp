@@ -1,4 +1,5 @@
 #include "../include/BotMove.hpp"
+#include <climits>
 
 using namespace ox;
 

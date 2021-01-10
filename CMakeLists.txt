@@ -16,6 +16,8 @@ elseif (UNIX)
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTORCC ON)
 
+    find_package(OpenMP REQUIRED)
+
     find_package(Boost 1.71.0 REQUIRED COMPONENTS python38)
     find_package(Python 3.8 REQUIRED)
     find_package(PythonLibs 3.8 REQUIRED)
@@ -34,10 +36,10 @@ add_executable(${EXECUTABLE_NAME} ${TARGET_SRC})
 
 if (WIN32)
     target_include_directories(${EXECUTABLE_NAME} PRIVATE ${PYTHON_INCLUDE_DIRS})
-    target_link_libraries(${EXECUTABLE_NAME} mahi::gui ${PYTHON_LIBRARIES})
+    target_link_libraries(${EXECUTABLE_NAME} mahi::gui ${PYTHON_LIBRARIES} OpenMP::OpenMP_CXX)
 elseif (UNIX)
     target_include_directories(${EXECUTABLE_NAME} PRIVATE ${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
-    target_link_libraries(${EXECUTABLE_NAME} mahi::gui Boost::python38 ${PYTHON_LIBRARIES})
+    target_link_libraries(${EXECUTABLE_NAME} mahi::gui Boost::python38 ${PYTHON_LIBRARIES} OpenMP::OpenMP_CXX)
 endif ()
 
 
@@ -65,4 +67,29 @@ if(BUILD_TESTS)
 
     add_test(UnitTest tests)
     enable_testing()
+endif()
+
+set (BUILD_DOCS True) #set TRUE if you want to build docs
+
+if(BUILD_DOCS)
+    find_package(Doxygen)
+    option(BUILD_DOCUMENTATION "Create and install the HTML based API
+    documentation (requires Doxygen)" ${DOXYGEN_FOUND})
+
+    if(NOT DOXYGEN_FOUND)
+        message(FATAL_ERROR "Doxygen is needed to build the documentation.")
+    endif()
+
+    set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile)
+    set(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/doxyfile)
+
+    configure_file(${doxyfile_in} ${doxyfile} @ONLY)
+
+    message("Doxygen build started.")
+
+    add_custom_target(docs
+            COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile_in}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/docs
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM)
 endif()
