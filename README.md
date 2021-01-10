@@ -20,11 +20,11 @@ cd ..
 Uruchomienie:
 #### Windows
 ```
-./bin/Debug/hello.exe
+./bin/Debug/zpr_gldg.exe
 ```
 #### Linux
 ```
-./bin/hello
+./bin/zpr_gldg
 ```
 ## Generowanie i uruchomienie testow
 Flaga BUILD_TESTS w CMakeLists.txt kontroluje uruchamianie testów przy budowie
