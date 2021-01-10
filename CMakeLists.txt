@@ -49,7 +49,7 @@ if(BUILD_TESTS)
 
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)
 
-    add_executable(tests ${CMAKE_HOME_DIRECTORY}/tests/basicTest.cpp ${TARGET_SRC} tests/basicTest.cpp)
+    add_executable(tests ${CMAKE_HOME_DIRECTORY}/tests/Tests.cpp ${TARGET_SRC} tests/Tests.cpp)
 
     if (WIN32)
         target_include_directories(tests PRIVATE ${PYTHON_INCLUDE_DIRS})
@@ -62,6 +62,7 @@ if(BUILD_TESTS)
     add_test(UnitTest tests)
     enable_testing()
 endif()
+
 
 set (BUILD_DOCS True) #set TRUE if you want to build docs
 

@@ -85,7 +85,7 @@ std::optional<Config> Config::try_from_script(const char *config_str)
     }
     catch (py::error_already_set const &)
     {
-        PyErr_Print();
+        // PyErr_Print();
         return std::optional<Config>();
     }
 }

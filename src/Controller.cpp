@@ -93,8 +93,7 @@ void Controller::exit()
 
 void Controller::play_game()
 {
-    bool exit_flag = false;
-    while (!exit_flag)
+    while (true)
     {
         if (need_player_input())
         {
@@ -102,7 +101,7 @@ void Controller::play_game()
             switch (message.messageType)
             {
             case EXIT:
-                exit_flag = true;
+                return exit();
                 break;
 
             case RESET_GAME:
@@ -134,7 +133,6 @@ void Controller::play_game()
             send_state();
         }
     }
-    exit();
 }
 
 bool Controller::try_load_saved_state()

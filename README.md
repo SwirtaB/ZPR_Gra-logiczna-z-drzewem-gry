@@ -20,11 +20,11 @@ cd ..
 Uruchomienie:
 #### Windows
 ``` sh
-./bin/Debug/zpr_gldg.exe
+./bin/Debug/zpr_gldg.exe [sciezka/do/pliku/konfiguracyjnego]
 ```
 #### Linux
 ``` sh
-./bin/zpr_gldg
+./bin/zpr_gldg [sciezka/do/pliku/konfiguracyjnego]
 ```
 ## Generowanie i uruchomienie testow
 Flaga BUILD_TESTS w CMakeLists.txt kontroluje uruchamianie testów przy budowie
@@ -34,11 +34,13 @@ set(BUILD_TESTS True)
 Po zbudowaniu z flaga BUILD_TESTS:
 #### Windows
 ``` sh
-./build/Debug/tests.exe
+cd tests
+../build/Debug/tests.exe
 ```
 #### Linux
 ``` sh
-./build/tests
+cd tests
+../build/tests
 ```
 ## Generowanie dokumentacji
 Flaga BUILD_DOCS w CMakeLists.txt kontroluje budowanie dokumentacji
