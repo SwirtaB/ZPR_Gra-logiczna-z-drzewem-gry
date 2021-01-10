@@ -1,6 +1,13 @@
-//
-// Created by swirta on 28.12.2020.
-//
+/**
+ * @file Controller.cpp
+ * @author Bartosz Świrta
+ * @brief Zawiera definicję metod klasy Controller
+ * @version 1.0
+ * @date 2021-01-10
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
 
 #include "../include/Controller.hpp"
 #include "../include/BotMove.hpp"
@@ -12,12 +19,23 @@
 
 using namespace ox;
 
+/**
+ * @brief Konstruktor kontrolera z podaną konfiguracją.
+ *        Komunikuje się z widokiem za pomocą podanego wspólnego pośrednika.
+ * 
+ * @param config_ - struktura przechowująca dane konfiguracyjne.
+ * @param queuesHandler_ - uchwyt na koljkę komunikatów.
+ */
 Controller::Controller(Config &config_, std::shared_ptr<MessageQueues> queuesHandler_)
     : gameState(PREPARING), messageQueues(queuesHandler_), config(config_)
 {
     send_state();
 }
 
+/**
+ * @brief Uruchamia kontroler, przejmuje wątek na czas działania.
+ * 
+ */
 void Controller::run()
 {
     if (!try_load_saved_state())
@@ -29,6 +47,10 @@ void Controller::run()
     play_game();
 }
 
+/**
+ * @brief Zainicjuj rozgrywkę z pustą planszą.
+ * 
+ */
 void Controller::init()
 {
     fieldBoard = FieldBoard();
@@ -43,21 +65,45 @@ void Controller::init()
     }
 }
 
+/**
+ * @brief Odbierz akcję gracza od widoku.
+ * 
+ * @return PlayerInputMessage - wiadomość z wartościami wprowadzonymi przez gracza.
+ */
 PlayerInputMessage Controller::get_player_input()
 {
     return messageQueues->wait_for_player_input();
 }
 
+/**
+ * @brief Czy ruch ma wykonać gracz który nie jest botem.
+ * 
+ * @return true 
+ * @return false 
+ */
 bool Controller::need_player_input() const
 {
     return gameState != PLAYING || currentPlayer == CROSS_PLAYER && !config.cross_is_bot || currentPlayer == CIRCLE_PLAYER && !config.circle_is_bot;
 }
 
+/**
+ * @brief Wyślij obacny stan gry do widoku.
+ * 
+ */
 void Controller::send_state() const
 {
     messageQueues->send_game_state(GameStateMessage(gameState, fieldBoard));
 }
 
+/**
+ * @brief Spróbuj wykonać ruch podanego gracza na danym polu.
+ * 
+ * @param x - wartość x pola.
+ * @param y - wartość y pola.
+ * @param player - gracz który wykonuje ruch.
+ * @return true - ruch wykonany.
+ * @return false - ruch był nieprawidłowy.
+ */
 bool Controller::select_field(int x, int y, PlayerEnum player)
 {
     switch (player)
@@ -71,6 +117,10 @@ bool Controller::select_field(int x, int y, PlayerEnum player)
     }
 }
 
+/**
+ * @brief Zamień gracza który będzie teraz wykonywał ruch.
+ * 
+ */
 void Controller::flip_player()
 {
     if (currentPlayer == CROSS_PLAYER)
@@ -83,6 +133,10 @@ void Controller::flip_player()
     }
 }
 
+/**
+ * @brief Zakończ pracę kontrolera, zapisz stan gry jeśli była w trakcie.
+ * 
+ */
 void Controller::exit()
 {
     if (gameState == PLAYING)
@@ -91,6 +145,10 @@ void Controller::exit()
     }
 }
 
+/**
+ * @brief Pętla rozgryki.
+ * 
+ */
 void Controller::play_game()
 {
     bool exit_flag = false;
@@ -137,6 +195,12 @@ void Controller::play_game()
     exit();
 }
 
+/**
+ * @brief Spróbuj wczytać stan gry z pliku o ścieżce podanej w pliku konfiguracyjnym.
+ * 
+ * @return true - poprawnie wczytano plik.
+ * @return false - w każdym innym przypadku.
+ */
 bool Controller::try_load_saved_state()
 {
     try
@@ -174,6 +238,12 @@ bool Controller::try_load_saved_state()
     }
 }
 
+/**
+ * @brief Spróbuj zapisać stan gry do pliku o ścieżce podanej w pliku konfiguracyjnym.
+ * 
+ * @return true - poprawnie zapisano plik.
+ * @return false - w każdym innym przypadku.
+ */
 bool Controller::try_save_state() const
 {
     try

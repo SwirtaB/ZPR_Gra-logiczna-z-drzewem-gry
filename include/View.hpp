@@ -1,3 +1,13 @@
+/**
+ * @file View.hpp
+ * @author Maciej Wojno
+ * @brief Zawiera definicję klasy View
+ * @version 1.0
+ * @date 2021-01-10
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #pragma once
 
 #include "../include/MessageQueues.hpp"
@@ -10,45 +20,76 @@
 
 namespace ox
 {
-
-    /// \brief Widok gry.
-    /// Wyświetla interfejs gracza i wysyła wykonywane przez niego akcje do kontrolera.
+    /**
+     * @brief Widok gry.
+     *        Wyświetla interfejs gracza i wysyła wykonywane przez niego akcje do kontrolera.
+     * 
+     */
     class View : public mahi::gui::Application
     {
     public:
-        /// \brief Konstruktor widoku z podaną konfiguracją.
-        /// Komunikuje się z widokiem za pomocą podanego wspólnego pośrednika.
+        /**
+         * @brief Konstruktor widoku z podaną konfiguracją.
+         * 
+         */
         View(ox::Config &config, std::shared_ptr<MessageQueues> messageQueues);
         virtual ~View();
-        /// Uruchamia widok, przejmuje wątek na czas działania.
+        /**
+         * @brief Uruchamia widok, przejmuje wątek na czas działania.
+         * 
+         */
         void run() { mahi::gui::Application::run(); }
 
     private:
-        /// Pośrednik komunikacji z kontrolerem.
+        /**
+         * @brief Pośrednik komunikacji z kontrolerem.
+         * 
+         */
         std::shared_ptr<MessageQueues> messageQueues;
-        /// Ostatni stan gry otrzymany od kontrolera.
+        /**
+         * @brief Ostatni stan gry otrzymany od kontrolera.
+         * 
+         */
         std::optional<GameStateMessage> lastState;
-        
-        /// \brief Funkcja aktualizacji interfejsu gracza.
-        /// Jest wykonywana w pętli, ponieważ jest to interfejs typu immidiate mode GUI
+        /**
+         * @brief Funkcja aktualizacji interfejsu gracza.
+         * 
+         */
         void update() override;
-        /// \brief Aktualizacja interfejsu w stanie gry PREPARING.
-        /// Wyświetla pust panel.
+        /**
+         * @brief Aktualizacja interfejsu w stanie gry PREPARING.
+         * 
+         */
         void update_preparing();
-        /// \brief Aktualizacja interfejsu w stanie gry IN_PROGRESS.
-        /// Wyświetla planszę gry i pozwala graczowi wybierać pole.
+        /**
+         * @brief Aktualizacja interfejsu w stanie gry IN_PROGRESS.
+         * 
+         */
         void update_game_in_progress(FieldBoard &fields);
-        /// \brief Aktualizacja interfejsu w stanie gry FINISHED.
-        /// Wyświetla informację o zwycięzcy i pozwala wywołac kolejną rozgrywkę.
+        /**
+         * @brief Aktualizacja interfejsu w stanie gry FINISHED.
+         * 
+         */
         void update_game_finished(PlayerEnum winner);
-
-        /// Oblicza współczynnik skalowania tekstu w zależności od rozmiaru okna.
+        /**
+         * @brief Oblicza współczynnik skalowania tekstu w zależności od rozmiaru okna.
+         * 
+         */
         float get_font_scale() const;
-        /// Wyświetla guzik na planszy w podanym stanie.
+        /**
+         * @brief Wyświetla przycisk na planszy w podanym stanie.
+         * 
+         */
         bool field_button(FieldState state) const;
-        /// Sprawdza czy przyszedł nowy stan od kontrolera.
+        /**
+         * @brief Sprawdza czy przyszedł nowy stan od kontrolera.
+         * 
+         */
         void check_for_new_state();
-        /// Wysyła akcję gracza do kontrolera.
+        /**
+         * @brief Wysyła akcję gracza do kontrolera.
+         * 
+         */
         void send_player_input(PlayerInputMessage message) const;
     };
 

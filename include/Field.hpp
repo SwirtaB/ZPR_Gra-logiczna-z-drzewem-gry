@@ -17,7 +17,7 @@
 
 namespace ox
 {
-    /**
+    /** \enum FieldState
      * @brief Możliwe stany pola w grze.
      * 
      */
@@ -29,7 +29,7 @@ namespace ox
         FIELD_STATE_ERROR
     };
 
-    /**
+    /** \class Field
      * @brief Pojedyńcze pole w grze.
      * 
      */
@@ -84,7 +84,7 @@ namespace ox
         FieldState fieldState;
     };
 
-    /**
+    /** \class FieldBoard
      * @brief Reprezentuje plansze do gry o rozmiarze 3x3.
      * 
      */
