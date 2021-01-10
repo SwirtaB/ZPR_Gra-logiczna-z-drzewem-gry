@@ -78,10 +78,6 @@ void View::update()
         case TIE:
             update_game_finished(PlayerEnum::NONE);
             break;
-
-        case GAME_STATE_ERROR:
-            update_game_state_error();
-            break;
         }
     }
     else
@@ -104,7 +100,7 @@ void View::update_game_in_progress(FieldBoard &fields)
     {
         for (int x = 0; x < 3; ++x)
         {
-            if (field_button(x, y, fields.get_field_state(x, y)))
+            if (field_button(fields.get_field_state(x, y)))
             {
                 send_player_input(PlayerInputMessage(INPUT, x, y));
                 std::cout << x << " " << y << std::endl;
@@ -126,18 +122,13 @@ void View::update_game_finished(PlayerEnum player)
     }
 }
 
-void View::update_game_state_error()
-{
-    ImGui::Text("Game State Error", get_window_size());
-}
-
 float View::get_font_scale() const
 {
     float min_dimension = std::min(get_window_size().x, get_window_size().y);
     return min_dimension / 300;
 }
 
-bool View::field_button(int x, int y, FieldState state) const
+bool View::field_button(FieldState state) const
 {
     switch (state)
     {

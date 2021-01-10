@@ -5,6 +5,7 @@
 
 namespace ox
 {
+    /// Możliwe stany rozgrywki.
     enum GameStateEnum
     {
         PREPARING,
@@ -12,9 +13,9 @@ namespace ox
         CIRCLE_WON,
         CROSS_WON,
         TIE,
-        GAME_STATE_ERROR
     };
 
+    /// Konkretny gracz lub jego brak.
     enum PlayerEnum
     {
         CIRCLE_PLAYER,

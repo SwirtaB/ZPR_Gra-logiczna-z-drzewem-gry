@@ -11,11 +11,11 @@
 
 using namespace ox;
 
+std::optional<Config> try_load_config(int argc, char *argv[]);
+
 int main(int argc, char *argv[])
 {
-    std::ifstream ifs("config.py");
-    std::string config_string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-    std::optional<Config> o_config = Config::try_from_script(config_string.c_str());
+    std::optional<Config> o_config = try_load_config(argc, argv);
     if (!o_config)
     {
         std::cerr << "Config error!" << std::endl;
@@ -36,4 +36,20 @@ int main(int argc, char *argv[])
 
     model_thread.join();
     return 0;
+}
+
+/// Spróbuj wczytać plik konfiguracyjny z podanej lub domyślnej ścieżki.
+std::optional<Config> try_load_config(int argc, char *argv[])
+{
+    std::ifstream ifs;
+    if (argc == 2)
+    {
+        ifs = std::move(std::ifstream(argv[1]));
+    }
+    else
+    {
+        ifs = std::move(std::ifstream("config.py"));
+    }
+    std::string config_string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    return Config::try_from_script(config_string.c_str());
 }
