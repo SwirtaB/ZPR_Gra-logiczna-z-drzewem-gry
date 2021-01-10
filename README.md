@@ -10,7 +10,7 @@
 
 ## Budowanie i uruchomienie
 Budowanie:
-```
+``` sh
 mkdir cmake-build
 cd cmake-build
 cmake ..
@@ -19,24 +19,37 @@ cd ..
 ```
 Uruchomienie:
 #### Windows
-```
+``` sh
 ./bin/Debug/zpr_gldg.exe
 ```
 #### Linux
-```
+``` sh
 ./bin/zpr_gldg
 ```
 ## Generowanie i uruchomienie testow
 Flaga BUILD_TESTS w CMakeLists.txt kontroluje uruchamianie testów przy budowie
-```
+``` cmake
 set(BUILD_TESTS True)
 ```
 Po zbudowaniu z flaga BUILD_TESTS:
 #### Windows
-```
+``` sh
 ./build/Debug/tests.exe
 ```
 #### Linux
-```
+``` sh
 ./build/tests
+```
+## Generowanie dokumentacji
+Flaga BUILD_DOCS w CMakeLists.txt kontroluje budowanie dokumentacji
+``` cmake
+set(BUILD_DOCS True)
+```
+Wygenerowana dokumentacja HTML jest umieszczana w folderze docs
+``` sh
+cd docs/html
+```
+Jeśli dokumentacja HTML nie wygenerowała się automatycznie trzeba ręcznie ją wygenerować z wygenerowanego pliku doxyfile w folderze cmake-build za pomocą terminalowego doxygena lub doxywizarda
+``` sh
+doxygen cmake-build/doxyfile
 ```

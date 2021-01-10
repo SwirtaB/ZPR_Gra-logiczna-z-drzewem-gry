@@ -7,4 +7,4 @@ bin/
 build/
 
 #documentation
-doc/
+docs/html

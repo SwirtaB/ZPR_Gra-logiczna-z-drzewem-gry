@@ -12,12 +12,6 @@ if (WIN32)
     find_package(Python 3.8 REQUIRED)
     find_package(PythonLibs 3.8 REQUIRED)
 elseif (UNIX)
-    set(CMAKE_AUTOMOC ON)
-    set(CMAKE_AUTOUIC ON)
-    set(CMAKE_AUTORCC ON)
-
-    find_package(OpenMP REQUIRED)
-
     find_package(Boost 1.71.0 REQUIRED COMPONENTS python38)
     find_package(Python 3.8 REQUIRED)
     find_package(PythonLibs 3.8 REQUIRED)
@@ -36,10 +30,10 @@ add_executable(${EXECUTABLE_NAME} ${TARGET_SRC})
 
 if (WIN32)
     target_include_directories(${EXECUTABLE_NAME} PRIVATE ${PYTHON_INCLUDE_DIRS})
-    target_link_libraries(${EXECUTABLE_NAME} mahi::gui ${PYTHON_LIBRARIES} OpenMP::OpenMP_CXX)
+    target_link_libraries(${EXECUTABLE_NAME} mahi::gui ${PYTHON_LIBRARIES})
 elseif (UNIX)
     target_include_directories(${EXECUTABLE_NAME} PRIVATE ${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
-    target_link_libraries(${EXECUTABLE_NAME} mahi::gui Boost::python38 ${PYTHON_LIBRARIES} OpenMP::OpenMP_CXX)
+    target_link_libraries(${EXECUTABLE_NAME} mahi::gui Boost::python38 ${PYTHON_LIBRARIES})
 endif ()
 
 
