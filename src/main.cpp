@@ -1,3 +1,13 @@
+/**
+ * @file main.cpp
+ * @author Maciej Wojno
+ * @brief Punkt wejscia do programu. Zawiera funkcje main, ktora uruchamia kolejne moduly programu.
+ * @version 1.0
+ * @date 2021-01-10
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #include <string>
 #include <fstream>
 #include <optional>
@@ -38,7 +48,13 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-/// Spróbuj wczytać plik konfiguracyjny z podanej lub domyślnej ścieżki.
+/**
+ * @brief Spróbuj wczytać plik konfiguracyjny z podanej lub domyślnej ścieżki.
+ * 
+ * @param argc 
+ * @param argv 
+ * @return std::optional<Config> - struktura przechowujaca dane wczytane z pliku konfiguracyjnego
+ */
 std::optional<Config> try_load_config(int argc, char *argv[])
 {
     std::ifstream ifs;

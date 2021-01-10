@@ -1,6 +1,13 @@
-//
-// Created by swirta on 28.12.2020.
-//
+/**
+ * @file Field.hpp
+ * @author Bartosz Świrta
+ * @brief Zawiera deklaracje klas: Field - reprezentuje pojedyncze pole, FieldBoard - reprezentuje plansze. Zawiera rowniez definicje FieldState - enumerator stanu pola
+ * @version 1.0
+ * @date 2021-01-10
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #pragma once
 
 #include "Utils.hpp"
@@ -10,7 +17,10 @@
 
 namespace ox
 {
-    /// Możliwe stany pola w grze.
+    /**
+     * @brief Możliwe stany pola w grze.
+     * 
+     */
     enum FieldState
     {
         EMPTY,
@@ -19,33 +29,65 @@ namespace ox
         FIELD_STATE_ERROR
     };
 
-    /// Pojedyńcze pole w grze.
+    /**
+     * @brief Pojedyńcze pole w grze.
+     * 
+     */
     class Field
     {
     public:
-        /// Utworzenie pola o podanym stanie.
+        /**
+         * @brief Utworzenie pola o podanym stanie.
+         * 
+         */
         Field(FieldState = EMPTY);
-        /// Wyczyść pole.
+        /**
+         * @brief Wyczyść pole.
+         * 
+         */
         void empty();
-        /// Zaznacz pole kółkiem.
+        /**
+         * @brief Zaznacz pole kółkiem.
+         * 
+         */
         void circle();
-        /// Zaznacz pole krzyżykiem.
+        /**
+         * @brief Zaznacz pole krzyżykiem.
+         * 
+         */
         void cross();
-        /// Czy pole jest puste.
+        /**
+         * @brief Czy pole jest puste.
+         */
         bool is_empty() const;
-        /// Czy na polu jest krzyżyk.
+        /**
+         * @brief Czy na polu jest krzyzyk.
+         *
+         */
         bool is_crossed() const;
-        /// Czy na polu jest kółko.
+        /**
+         * @brief Czy na polu jest kółko.
+         *
+         */
         bool is_circled() const;
-        /// Zwróć stan pola.
+        /**
+         * @brief Zwraca stan obiektu
+         *
+         */
         const FieldState get_state() const;
 
     private:
-        /// Stan pola.
+        /**
+         * @brief Stan pola.
+         *
+         */
         FieldState fieldState;
     };
 
-    /// Plansza gry o rozmiarze 3x3.
+    /**
+     * @brief Reprezentuje plansze do gry o rozmiarze 3x3.
+     * 
+     */
     class FieldBoard
     {
     public:
@@ -57,7 +99,6 @@ namespace ox
         bool circle_field(int x, int y);
         /// Wyczyszczenie danego pola.
         bool empty_field(int x, int y);
-
         /// Zwróć stan danego pola.
         const FieldState get_field_state(int x, int y) const;
         /// Czy plansza jest pełna - żadne pole nie jest puste.
@@ -67,10 +108,7 @@ namespace ox
 
         /// Spróbuj odczytać zapisany wcześniej stan planszy ze strumienia.
         static std::optional<FieldBoard> try_read(std::istream &);
-        /// \brief Zapisz stan planszy do strumienia.
-        /// \details
-        /// Zapisuje kolejne stany pól oddzielone spacjami i nowymi liniami tak,
-        /// aby zapis był czytelny w tekście dla człowieka.
+        /// Zapisz stan planszy do strumienia.
         void write(std::ostream &) const;
 
     private:

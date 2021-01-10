@@ -8,20 +8,14 @@
 #include <boost/test/test_tools.hpp>
 #include "../include/Controller.hpp"
 
+#include <fstream>
 #include <iostream>
 
 #include <boost/python.hpp>
+
 namespace py = boost::python;
 
 using namespace ox;
-
-BOOST_AUTO_TEST_CASE(dummy_test)
-{
-    std::cout << "---DUMMY TEST---" << std::endl;
-    int i = 2;
-    i += i;
-    BOOST_CHECK_EQUAL(i, 4);
-}
 
 BOOST_AUTO_TEST_CASE(boost_python_test)
 {
@@ -40,6 +34,32 @@ BOOST_AUTO_TEST_CASE(boost_python_test)
         PyErr_Print();
     }
     BOOST_CHECK_EQUAL(res, 3);
+}
+
+BOOST_AUTO_TEST_CASE(python_config_read_test)
+{
+    std::cout << "---PYTHON CONFIG READ TEST---" << std::endl;
+    std::ifstream ifs = std::move(std::ifstream("no_file_test_config.py"));
+    std::string no_file_config_string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    std::optional<Config> o_config = Config::try_from_script(no_file_config_string.c_str());
+    BOOST_REQUIRE_EQUAL(o_config.has_value(), 0);
+
+    ifs = std::move(std::ifstream("worng_data_file_test_config.py"));
+    std::string worng_data_config_string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    o_config = Config::try_from_script(no_file_config_string.c_str());
+    BOOST_REQUIRE_EQUAL(o_config.has_value(), 0);
+
+    ifs = std::move(std::ifstream("test_config.py"));
+    std::string config_string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    o_config = Config::try_from_script(config_string.c_str());
+
+    BOOST_REQUIRE_EQUAL(o_config.value().bot_tactic, GAME_TREE);
+    BOOST_REQUIRE_EQUAL(o_config.value().depth, 10);
+    BOOST_REQUIRE_EQUAL(o_config.value().start, CROSS);
+    BOOST_REQUIRE_EQUAL(o_config.value().circle_is_bot, 1);
+    BOOST_REQUIRE_EQUAL(o_config.value().cross_is_bot, 0);
+    BOOST_REQUIRE_EQUAL(o_config.value().save_path, "save.txt");
+    BOOST_REQUIRE_EQUAL(o_config.value().ui_size, SMALL);
 }
 
 BOOST_AUTO_TEST_CASE(game_test)

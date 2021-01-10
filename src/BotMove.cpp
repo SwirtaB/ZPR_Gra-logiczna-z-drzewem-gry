@@ -1,3 +1,13 @@
+/**
+ * @file BotMove.cpp
+ * @author Bartosz Świrta
+ * @brief Zawiera definicje metody bot_move, estimate_move - heurystyka ewaluujaca ruch, minimax - implementuje algorytm minimax
+ * @version 1.0
+ * @date 2021-01-10
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #include "../include/BotMove.hpp"
 #include <climits>
 
@@ -6,6 +16,15 @@ using namespace ox;
 int estimate_move(const FieldBoard &, PlayerEnum, int x, int y);
 int minimax(int x, int y, int depth_, int alpha, int beta, FieldBoard gameField, PlayerEnum player);
 
+/**
+ * @brief Implemetuje obsluge ruchu bot'a. Wywoluje odpowiednie funkcje w zaleznosci od wartosci wczytanych z pliku konfiguracyjnego.
+ * 
+ * @param fieldBoard - rozpatrywana plansza
+ * @param player - ktory gracz ma wykonac ruch
+ * @param tactic - taktyka uzywana przez bot'a
+ * @param depth - glebokosc przegladania
+ * @return std::pair<int, int> - najlepszy mozliwy ruch
+ */
 std::pair<int, int> ox::bot::bot_move(const FieldBoard &fieldBoard, PlayerEnum player, ConfigBotTactic tactic, int depth)
 {
     FieldBoard tmpField = fieldBoard;
@@ -31,6 +50,7 @@ std::pair<int, int> ox::bot::bot_move(const FieldBoard &fieldBoard, PlayerEnum p
                     else // config.bot_tactic == GAME_TREE
                     {
                         tmpField.circle_field(x, y);
+                        /*alpha = INT_MIN, beta = INT_MAX do alpha-beta pruning'u*/
                         score = minimax(x, y, depth - 1, INT_MIN, INT_MAX, tmpField, CROSS_PLAYER);
                         tmpField.empty_field(x, y);
                     }
@@ -81,7 +101,15 @@ std::pair<int, int> ox::bot::bot_move(const FieldBoard &fieldBoard, PlayerEnum p
     return bestMove;
 }
 
-//ten estymator nie jest najbardziej wyszukany, ale dziala.
+/**
+ * @brief Funkcja ktora estymuje "jakosc" planszy dla danego gracza. Kolko minimalizuje jakosc, krzyzyk maksymalizuje jakosc
+ * 
+ * @param gameField - obecnie rozpatrywana plansza
+ * @param player - ktory gracz wykonuje ruch
+ * @param x - wpsolrzedna x rozpatrywanego ruchu
+ * @param y - wspolrzedna y rozpatrywanego ruchu
+ * @return int - jakosc danej planszy (w konsekwencji rowniez rozpatrywanego ruchu)
+ */
 int estimate_move(const FieldBoard &gameField, PlayerEnum player, int x, int y)
 {
     switch (gameField.check_state())
@@ -361,7 +389,18 @@ int estimate_move(const FieldBoard &gameField, PlayerEnum player, int x, int y)
     }
     return bestScore;
 }
-
+/**
+ * @brief Implementuje algorytm minimax wykorzystujac alpha-beta pruning
+ * 
+ * @param x - wspolrzedna x rozpatrywanego ruchu
+ * @param y - wspolrzedna y rozpatrywanego ruchu
+ * @param depth - gleboksc przegladania
+ * @param alpha - wartosc zmiennej alpha (alpha-beta pruning)
+ * @param beta - wartosc zmiennej beta (alpha-beta pruning)
+ * @param gameField - obecnie rozpatrywana plansza
+ * @param player - gracz wykonujacy ruch
+ * @return int - jakosc danej planszy
+ */
 int minimax(int x, int y, int depth, int alpha, int beta, FieldBoard gameField, PlayerEnum player)
 {
     if (!depth || gameField.check_state() != PLAYING)

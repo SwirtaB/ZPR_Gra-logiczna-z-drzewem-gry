@@ -1,11 +1,21 @@
-//
-// Created by swirta on 28.12.2020.
-//
+/**
+ * @file Utils.hpp
+ * @author Bartosz Świrta
+ * @brief Zawiera definicje GameStateEnum i PlayerEnum
+ * @version 1.0
+ * @date 2021-01-10
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #pragma once
 
 namespace ox
 {
-    /// Możliwe stany rozgrywki.
+    /**
+     * @brief Możliwe stany rozgrywki.
+     * 
+     */
     enum GameStateEnum
     {
         PREPARING,
@@ -15,7 +25,10 @@ namespace ox
         TIE,
     };
 
-    /// Konkretny gracz lub jego brak.
+    /**
+     * @brief Konkretny gracz lub jego brak.
+     * 
+     */
     enum PlayerEnum
     {
         CIRCLE_PLAYER,
