@@ -28,7 +28,7 @@ file(GLOB TARGET_SRC "./src/*.cpp" )
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/bin)
 set(CMAKE_EXPORT_COMPILE_COMMANDS)
 
-set(EXECUTABLE_NAME "hello")
+set(EXECUTABLE_NAME "zpr_gldg")
 include_directories(${CMAKE_HOME_DIRECTORY}/include)
 add_executable(${EXECUTABLE_NAME} ${TARGET_SRC})
 

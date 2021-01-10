@@ -1,44 +1,56 @@
 //
 // Created by swirta on 28.12.2020.
 //
-
-#ifndef FIELD_HPP
-#define FIELD_HPP
+#pragma once
 
 #include "Utils.hpp"
 #include <array>
 #include <iostream>
 #include <optional>
 
-namespace ox {
+namespace ox
+{
+    enum FieldState
+    {
+        EMPTY,
+        CIRCLED,
+        CROSSED,
+        FIELD_STATE_ERROR
+    };
 
-class Field{
-private:
-    FieldStateEnum fieldState;
-public:
-    Field(FieldStateEnum = EMPTY);
-    void empty();
-    void circle();
-    void cross();
-    bool is_empty();
-    bool is_crossed();
-    bool is_circled();
-    FieldStateEnum get_state();
-};
+    class Field
+    {
+    public:
+        Field(FieldState = EMPTY);
+        void empty();
+        void circle();
+        void cross();
+        bool is_empty() const;
+        bool is_crossed() const;
+        bool is_circled() const;
+        const FieldState get_state() const;
 
-class GameField{
-private:
-    std::array<Field, 9> fieldArray;
-public:
-    void reset_game_fields();
-    bool cross_field(int x, int y);
-    bool circle_field(int x, int y);
-    bool empty_field(int x, int y);
-    FieldStateEnum get_field_state(int x, int y);
+    private:
+        FieldState fieldState;
+    };
 
-    static std::optional<GameField> try_read(std::istream&);
-    void write(std::ostream&);
-};
+    class FieldBoard
+    {
+    public:
+        void reset_game_fields();
+        bool cross_field(int x, int y);
+        bool circle_field(int x, int y);
+        bool empty_field(int x, int y);
 
-}
-#endif //FIELD_HPP
+        const FieldState get_field_state(int x, int y) const;
+        bool is_board_full() const;
+        const GameStateEnum check_state() const;
+
+        static std::optional<FieldBoard> try_read(std::istream &);
+        void write(std::ostream &) const;
+
+    private:
+        std::array<Field, 9> fieldArray;
+    };
+
+} // namespace ox
