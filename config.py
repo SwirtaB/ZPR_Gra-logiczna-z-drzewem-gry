@@ -10,6 +10,6 @@ cross_is_bot = False
 circle_is_bot = True
 start = "cross"
 bot_tactic = "game tree"
-ui_size = "small"
+ui_size = "medium"
 depth = 10
 save_path = "save.txt"

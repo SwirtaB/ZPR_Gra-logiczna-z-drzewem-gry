@@ -177,13 +177,7 @@ void Controller::play_game()
         }
         else
         {
-            std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-
             std::pair<int, int> move = bot::bot_move(fieldBoard, currentPlayer, config.bot_tactic, config.depth);
-
-            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-            std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
-
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
             select_field(move.first, move.second, currentPlayer);
             flip_player();
