@@ -183,7 +183,7 @@ BOOST_AUTO_TEST_CASE(FieldBoard_manipulation_test)
     fb.circle_field(0, 2);
     BOOST_REQUIRE_EQUAL(fb.is_board_full(), false);
     BOOST_REQUIRE_EQUAL(fb.check_state(), CIRCLE_WON);
-    
+
     fb.reset_game_fields();
     fb.circle_field(0, 0);
     fb.circle_field(1, 0);
@@ -196,7 +196,7 @@ BOOST_AUTO_TEST_CASE(FieldBoard_manipulation_test)
     fb.circle_field(2, 2);
     BOOST_REQUIRE_EQUAL(fb.is_board_full(), true);
     BOOST_REQUIRE_EQUAL(fb.check_state(), CROSS_WON);
-    
+
     fb.reset_game_fields();
     fb.circle_field(0, 0);
     fb.circle_field(1, 0);
@@ -425,7 +425,8 @@ BOOST_AUTO_TEST_CASE(Controller_save_game_test)
             else if (recieved2 == 1)
             {
                 BOOST_REQUIRE_EQUAL(gs.value().gameStateEnum, LOAD_SAVE_QUESTION);
-            } else
+            }
+            else
             {
                 BOOST_REQUIRE_EQUAL(gs.value().gameStateEnum, PLAYING);
             }

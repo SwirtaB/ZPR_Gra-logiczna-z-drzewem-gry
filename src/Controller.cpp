@@ -40,9 +40,12 @@ void Controller::run()
 {
     loadedSave = try_load_saved_state(config);
     init();
-    if (loadedSave.has_value()) {
+    if (loadedSave.has_value())
+    {
         gameState = LOAD_SAVE_QUESTION;
-    } else {
+    }
+    else
+    {
         gameState = PLAYING;
     }
     send_state();
@@ -167,7 +170,7 @@ void Controller::play_game()
             case RESET_GAME:
                 init();
                 break;
-            
+
             case LOAD_SAVE:
                 try_load_cached_save();
                 break;
@@ -197,8 +200,10 @@ void Controller::play_game()
  * @brief Ustaw stan gry na ten z wczytanej gry.
  * 
  */
-void Controller::try_load_cached_save() {
-    if (loadedSave) {
+void Controller::try_load_cached_save()
+{
+    if (loadedSave)
+    {
         fieldBoard = loadedSave.value().first;
         currentPlayer = loadedSave.value().second;
         gameState = PLAYING;

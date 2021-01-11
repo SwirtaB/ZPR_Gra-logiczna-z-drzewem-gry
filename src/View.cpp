@@ -84,7 +84,7 @@ void View::update()
         case PREPARING:
             update_preparing();
             break;
-        
+
         case LOAD_SAVE_QUESTION:
             update_load_save_question();
             break;
@@ -132,11 +132,13 @@ void View::update_load_save_question()
 {
     ImGui::Text("Load saved state?");
 
-    if (ImGui::Button("Yes")) {
+    if (ImGui::Button("Yes"))
+    {
         send_player_input(PlayerInputMessage(LOAD_SAVE, 0, 0));
     }
     ImGui::PushID("b");
-    if (ImGui::Button("No")) {
+    if (ImGui::Button("No"))
+    {
         send_player_input(PlayerInputMessage(NO_LOAD_SAVE, 0, 0));
     }
     ImGui::PopID();

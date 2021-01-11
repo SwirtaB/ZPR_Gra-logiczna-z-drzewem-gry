@@ -24,4 +24,4 @@ namespace ox::bot
      * @return std::pair<int, int> - najlepszy mozliwy ruch
      */
     std::pair<int, int> bot_move(const FieldBoard &, PlayerEnum, ConfigBotTactic, int depth);
-}
+} // namespace ox::bot
