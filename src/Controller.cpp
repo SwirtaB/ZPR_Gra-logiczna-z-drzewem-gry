@@ -38,11 +38,13 @@ Controller::Controller(Config &config_, std::shared_ptr<MessageQueues> queuesHan
  */
 void Controller::run()
 {
-    if (!try_load_saved_state())
-    {
-        init();
+    loadedSave = try_load_saved_state(config);
+    init();
+    if (loadedSave.has_value()) {
+        gameState = LOAD_SAVE_QUESTION;
+    } else {
+        gameState = PLAYING;
     }
-    gameState = PLAYING;
     send_state();
     play_game();
 }
@@ -165,6 +167,10 @@ void Controller::play_game()
             case RESET_GAME:
                 init();
                 break;
+            
+            case LOAD_SAVE:
+                try_load_cached_save();
+                break;
 
             case INPUT:
                 /*Weryfikacja czy wykonany przez gracza ruch byl poprawny*/
@@ -188,12 +194,24 @@ void Controller::play_game()
 }
 
 /**
+ * @brief Ustaw stan gry na ten z wczytanej gry.
+ * 
+ */
+void Controller::try_load_cached_save() {
+    if (loadedSave) {
+        fieldBoard = loadedSave.value().first;
+        currentPlayer = loadedSave.value().second;
+        gameState = PLAYING;
+    }
+}
+
+/**
  * @brief Spróbuj wczytać stan gry z pliku o ścieżce podanej w pliku konfiguracyjnym.
  * 
  * @return true - poprawnie wczytano plik.
  * @return false - w każdym innym przypadku.
  */
-bool Controller::try_load_saved_state()
+std::optional<std::pair<FieldBoard, PlayerEnum>> Controller::try_load_saved_state(const Config &config)
 {
     try
     {
@@ -201,7 +219,7 @@ bool Controller::try_load_saved_state()
         std::optional<FieldBoard> loaded_gf = FieldBoard::try_read(save);
         if (!loaded_gf.has_value())
         {
-            return false;
+            return std::optional<std::pair<FieldBoard, PlayerEnum>>();
         }
         std::string player;
         PlayerEnum current_player;
@@ -216,22 +234,19 @@ bool Controller::try_load_saved_state()
         }
         else
         {
-            return false;
+            return std::optional<std::pair<FieldBoard, PlayerEnum>>();
         }
 
-        fieldBoard = loaded_gf.value();
-        currentPlayer = current_player;
-        gameState = PLAYING;
-        return true;
+        return std::make_pair(loaded_gf.value(), current_player);
     }
     catch (std::exception &e)
     {
-        return false;
+        return std::optional<std::pair<FieldBoard, PlayerEnum>>();
     }
 }
 
 /**
- * @brief Spróbuj zapisać stan gry do pliku o ścieżce podanej w pliku konfiguracyjnym.
+ * @brief Spróbuj zapisać obecny stan gry do pliku o ścieżce podanej w pliku konfiguracyjnym.
  * 
  * @return true - poprawnie zapisano plik.
  * @return false - w każdym innym przypadku.

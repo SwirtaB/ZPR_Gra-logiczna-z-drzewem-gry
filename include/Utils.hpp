@@ -19,6 +19,7 @@ namespace ox
     enum GameStateEnum
     {
         PREPARING,
+        LOAD_SAVE_QUESTION,
         PLAYING,
         CIRCLE_WON,
         CROSS_WON,

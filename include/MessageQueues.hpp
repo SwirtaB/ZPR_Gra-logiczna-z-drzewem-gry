@@ -39,7 +39,9 @@ namespace ox
     {
         EXIT,
         RESET_GAME,
-        INPUT
+        INPUT,
+        LOAD_SAVE,
+        NO_LOAD_SAVE
     };
 
     /**

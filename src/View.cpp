@@ -84,6 +84,10 @@ void View::update()
         case PREPARING:
             update_preparing();
             break;
+        
+        case LOAD_SAVE_QUESTION:
+            update_load_save_question();
+            break;
 
         case PLAYING:
             update_game_in_progress(fields);
@@ -117,6 +121,25 @@ void View::update()
  */
 void View::update_preparing()
 {
+}
+
+/**
+ * @brief Aktualizacja interfejsu w stanie gry LOAD_SAVE_QUESTION. 
+ * @details Wyświetla pytanie o wczytanie zapisanego stanu gry.
+ * 
+ */
+void View::update_load_save_question()
+{
+    ImGui::Text("Load saved state?");
+
+    if (ImGui::Button("Yes")) {
+        send_player_input(PlayerInputMessage(LOAD_SAVE, 0, 0));
+    }
+    ImGui::PushID("b");
+    if (ImGui::Button("No")) {
+        send_player_input(PlayerInputMessage(NO_LOAD_SAVE, 0, 0));
+    }
+    ImGui::PopID();
 }
 
 /**

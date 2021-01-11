@@ -62,6 +62,11 @@ namespace ox
          */
         void update_preparing();
         /**
+         * @brief Aktualizacja interfejsu w stanie gry LOAD_SAVE_QUESTION.
+         * 
+         */
+        void update_load_save_question();
+        /**
          * @brief Aktualizacja interfejsu w stanie gry IN_PROGRESS.
          * 
          */

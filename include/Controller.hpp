@@ -13,6 +13,8 @@
 #include "../include/MessageQueues.hpp"
 #include "../include/Config.hpp"
 
+#include <optional>
+
 namespace ox
 {
     /**
@@ -46,6 +48,8 @@ namespace ox
         Config config;
         /// Który gracz ma wykonać teraz ruch.
         PlayerEnum currentPlayer;
+        /// Zapis gry wczytany przy uruchamianiu.
+        std::optional<std::pair<FieldBoard, PlayerEnum>> loadedSave;
 
         /// Zainicjuj rozgrywkę z pustą planszą.
         void init();
@@ -57,16 +61,18 @@ namespace ox
         void send_state() const;
         /// Spróbuj wykonać ruch podanego gracza na danym polu.
         bool select_field(int x, int y, PlayerEnum player);
-        /// Zamień gracza który będzie teraz wykonywał ruch. 
+        /// Zamień gracza który będzie teraz wykonywał ruch.
         void flip_player();
         /// Pętla rozgryki.
         void play_game();
         /// Zakończ pracę kontrolera, zapisz stan gry jeśli była w trakcie.
         void exit();
 
+        /// Ustaw stan gry na ten z wczytanej gry.
+        void try_load_cached_save();
         /// Spróbuj wczytać stan gry z pliku o ścieżce podanej w pliku konfiguracyjnym.
-        bool try_load_saved_state();
-        /// Spróbuj zapisać stan gry do pliku o ścieżce podanej w pliku konfiguracyjnym.
+        static std::optional<std::pair<FieldBoard, PlayerEnum>> try_load_saved_state(const Config &config);
+        /// Spróbuj zapisać obecny stan gry do pliku o ścieżce podanej w pliku konfiguracyjnym.
         bool try_save_state() const;
     };
 

@@ -70,6 +70,7 @@ BOOST_AUTO_TEST_CASE(Config_read_test)
     std::string config_string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
     o_config = Config::try_from_script(config_string.c_str());
 
+    BOOST_REQUIRE_EQUAL(o_config.has_value(), true);
     BOOST_CHECK_EQUAL(o_config.value().bot_tactic, GAME_TREE);
     BOOST_CHECK_EQUAL(o_config.value().depth, 10);
     BOOST_CHECK_EQUAL(o_config.value().start, CROSS);
@@ -88,51 +89,51 @@ BOOST_AUTO_TEST_CASE(Field_manipulation_test)
     std::cout << "---FIELD MANIPULATION TEST---" << std::endl;
 
     Field field;
-    BOOST_REQUIRE_EQUAL(field.is_empty(), true);
-    BOOST_REQUIRE_EQUAL(field.is_circled(), false);
-    BOOST_REQUIRE_EQUAL(field.is_crossed(), false);
-    BOOST_REQUIRE_EQUAL(field.get_state(), EMPTY);
+    BOOST_CHECK_EQUAL(field.is_empty(), true);
+    BOOST_CHECK_EQUAL(field.is_circled(), false);
+    BOOST_CHECK_EQUAL(field.is_crossed(), false);
+    BOOST_CHECK_EQUAL(field.get_state(), EMPTY);
 
     Field field2(CIRCLED);
-    BOOST_REQUIRE_EQUAL(field2.is_empty(), false);
-    BOOST_REQUIRE_EQUAL(field2.is_circled(), true);
-    BOOST_REQUIRE_EQUAL(field2.is_crossed(), false);
-    BOOST_REQUIRE_EQUAL(field2.get_state(), CIRCLED);
+    BOOST_CHECK_EQUAL(field2.is_empty(), false);
+    BOOST_CHECK_EQUAL(field2.is_circled(), true);
+    BOOST_CHECK_EQUAL(field2.is_crossed(), false);
+    BOOST_CHECK_EQUAL(field2.get_state(), CIRCLED);
 
     Field field3(CROSSED);
-    BOOST_REQUIRE_EQUAL(field3.is_empty(), false);
-    BOOST_REQUIRE_EQUAL(field3.is_circled(), false);
-    BOOST_REQUIRE_EQUAL(field3.is_crossed(), true);
-    BOOST_REQUIRE_EQUAL(field3.get_state(), CROSSED);
+    BOOST_CHECK_EQUAL(field3.is_empty(), false);
+    BOOST_CHECK_EQUAL(field3.is_circled(), false);
+    BOOST_CHECK_EQUAL(field3.is_crossed(), true);
+    BOOST_CHECK_EQUAL(field3.get_state(), CROSSED);
 
     Field field4 = field2;
-    BOOST_REQUIRE_EQUAL(field4.is_empty(), false);
-    BOOST_REQUIRE_EQUAL(field4.is_circled(), true);
-    BOOST_REQUIRE_EQUAL(field4.is_crossed(), false);
-    BOOST_REQUIRE_EQUAL(field4.get_state(), CIRCLED);
+    BOOST_CHECK_EQUAL(field4.is_empty(), false);
+    BOOST_CHECK_EQUAL(field4.is_circled(), true);
+    BOOST_CHECK_EQUAL(field4.is_crossed(), false);
+    BOOST_CHECK_EQUAL(field4.get_state(), CIRCLED);
 
     field4.empty();
-    BOOST_REQUIRE_EQUAL(field4.is_empty(), true);
-    BOOST_REQUIRE_EQUAL(field4.is_circled(), false);
-    BOOST_REQUIRE_EQUAL(field4.is_crossed(), false);
-    BOOST_REQUIRE_EQUAL(field4.get_state(), EMPTY);
+    BOOST_CHECK_EQUAL(field4.is_empty(), true);
+    BOOST_CHECK_EQUAL(field4.is_circled(), false);
+    BOOST_CHECK_EQUAL(field4.is_crossed(), false);
+    BOOST_CHECK_EQUAL(field4.get_state(), EMPTY);
 
     field4.circle();
-    BOOST_REQUIRE_EQUAL(field4.is_empty(), false);
-    BOOST_REQUIRE_EQUAL(field4.is_circled(), true);
-    BOOST_REQUIRE_EQUAL(field4.is_crossed(), false);
-    BOOST_REQUIRE_EQUAL(field4.get_state(), CIRCLED);
+    BOOST_CHECK_EQUAL(field4.is_empty(), false);
+    BOOST_CHECK_EQUAL(field4.is_circled(), true);
+    BOOST_CHECK_EQUAL(field4.is_crossed(), false);
+    BOOST_CHECK_EQUAL(field4.get_state(), CIRCLED);
 
     field4.cross();
-    BOOST_REQUIRE_EQUAL(field4.is_empty(), false);
-    BOOST_REQUIRE_EQUAL(field4.is_circled(), false);
-    BOOST_REQUIRE_EQUAL(field4.is_crossed(), true);
-    BOOST_REQUIRE_EQUAL(field4.get_state(), CROSSED);
+    BOOST_CHECK_EQUAL(field4.is_empty(), false);
+    BOOST_CHECK_EQUAL(field4.is_circled(), false);
+    BOOST_CHECK_EQUAL(field4.is_crossed(), true);
+    BOOST_CHECK_EQUAL(field4.get_state(), CROSSED);
 
-    BOOST_REQUIRE_EQUAL(field2.is_empty(), false);
-    BOOST_REQUIRE_EQUAL(field2.is_circled(), true);
-    BOOST_REQUIRE_EQUAL(field2.is_crossed(), false);
-    BOOST_REQUIRE_EQUAL(field2.get_state(), CIRCLED);
+    BOOST_CHECK_EQUAL(field2.is_empty(), false);
+    BOOST_CHECK_EQUAL(field2.is_circled(), true);
+    BOOST_CHECK_EQUAL(field2.is_crossed(), false);
+    BOOST_CHECK_EQUAL(field2.get_state(), CIRCLED);
 }
 
 BOOST_AUTO_TEST_CASE(FieldBoard_manipulation_test)
@@ -404,6 +405,7 @@ BOOST_AUTO_TEST_CASE(Controller_save_game_test)
 
     std::shared_ptr<MessageQueues> mq2 = std::make_shared<MessageQueues>();
     Controller game2(config, mq2);
+    mq2->send_player_input(PlayerInputMessage(LOAD_SAVE, 0, 0));
     mq2->send_player_input(PlayerInputMessage(INPUT, 0, 2));
     mq2->send_player_input(PlayerInputMessage(INPUT, 2, 2));
     mq2->send_player_input(PlayerInputMessage(EXIT, 0, 0));
@@ -411,7 +413,7 @@ BOOST_AUTO_TEST_CASE(Controller_save_game_test)
     BOOST_REQUIRE_EQUAL(remove(config.save_path.c_str()), 0);
 
     int recieved2 = 0;
-    while (recieved2 < 3)
+    while (recieved2 < 4)
     {
         std::optional<GameStateMessage> gs = mq2->check_for_game_state();
         if (gs)
@@ -420,7 +422,10 @@ BOOST_AUTO_TEST_CASE(Controller_save_game_test)
             {
                 BOOST_REQUIRE_EQUAL(gs.value().gameStateEnum, PREPARING);
             }
-            else
+            else if (recieved2 == 1)
+            {
+                BOOST_REQUIRE_EQUAL(gs.value().gameStateEnum, LOAD_SAVE_QUESTION);
+            } else
             {
                 BOOST_REQUIRE_EQUAL(gs.value().gameStateEnum, PLAYING);
             }
