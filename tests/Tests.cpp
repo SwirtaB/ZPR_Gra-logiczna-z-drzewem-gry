@@ -59,24 +59,24 @@ BOOST_AUTO_TEST_CASE(Config_read_test)
     std::ifstream ifs = std::move(std::ifstream("no_file_test_config.py"));
     std::string no_file_config_string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
     std::optional<Config> o_config = Config::try_from_script(no_file_config_string.c_str());
-    BOOST_REQUIRE_EQUAL(o_config.has_value(), false);
+    BOOST_CHECK_EQUAL(o_config.has_value(), false);
 
     ifs = std::move(std::ifstream("worng_data_file_test_config.py"));
     std::string worng_data_config_string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
     o_config = Config::try_from_script(no_file_config_string.c_str());
-    BOOST_REQUIRE_EQUAL(o_config.has_value(), false);
+    BOOST_CHECK_EQUAL(o_config.has_value(), false);
 
     ifs = std::move(std::ifstream("test_config.py"));
     std::string config_string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
     o_config = Config::try_from_script(config_string.c_str());
 
-    BOOST_REQUIRE_EQUAL(o_config.value().bot_tactic, GAME_TREE);
-    BOOST_REQUIRE_EQUAL(o_config.value().depth, 10);
-    BOOST_REQUIRE_EQUAL(o_config.value().start, CROSS);
-    BOOST_REQUIRE_EQUAL(o_config.value().circle_is_bot, true);
-    BOOST_REQUIRE_EQUAL(o_config.value().cross_is_bot, false);
-    BOOST_REQUIRE_EQUAL(o_config.value().save_path, "save.txt");
-    BOOST_REQUIRE_EQUAL(o_config.value().ui_size, SMALL);
+    BOOST_CHECK_EQUAL(o_config.value().bot_tactic, GAME_TREE);
+    BOOST_CHECK_EQUAL(o_config.value().depth, 10);
+    BOOST_CHECK_EQUAL(o_config.value().start, CROSS);
+    BOOST_CHECK_EQUAL(o_config.value().circle_is_bot, true);
+    BOOST_CHECK_EQUAL(o_config.value().cross_is_bot, false);
+    BOOST_CHECK_EQUAL(o_config.value().save_path, "save.txt");
+    BOOST_CHECK_EQUAL(o_config.value().ui_size, SMALL);
 }
 
 //! CONFIG ///////////////////
@@ -347,11 +347,11 @@ BOOST_AUTO_TEST_CASE(Controller_play_game_test)
         {
             if (recieved == 0)
             {
-                BOOST_CHECK_EQUAL(gs.value().gameStateEnum, PREPARING);
+                BOOST_REQUIRE_EQUAL(gs.value().gameStateEnum, PREPARING);
             }
             else
             {
-                BOOST_CHECK_EQUAL(gs.value().gameStateEnum, PLAYING);
+                BOOST_REQUIRE_EQUAL(gs.value().gameStateEnum, PLAYING);
             }
             ++recieved;
         }
@@ -362,7 +362,7 @@ BOOST_AUTO_TEST_CASE(Controller_play_game_test)
     {
         last_gs = testQueuesHandler->check_for_game_state();
     } while (!last_gs);
-    BOOST_CHECK_EQUAL(last_gs.value().gameStateEnum, CIRCLE_WON);
+    BOOST_REQUIRE_EQUAL(last_gs.value().gameStateEnum, CIRCLE_WON);
 }
 
 BOOST_AUTO_TEST_CASE(Controller_save_game_test)
@@ -392,11 +392,11 @@ BOOST_AUTO_TEST_CASE(Controller_save_game_test)
         {
             if (recieved == 0)
             {
-                BOOST_CHECK_EQUAL(gs.value().gameStateEnum, PREPARING);
+                BOOST_REQUIRE_EQUAL(gs.value().gameStateEnum, PREPARING);
             }
             else
             {
-                BOOST_CHECK_EQUAL(gs.value().gameStateEnum, PLAYING);
+                BOOST_REQUIRE_EQUAL(gs.value().gameStateEnum, PLAYING);
             }
             ++recieved;
         }
@@ -408,7 +408,7 @@ BOOST_AUTO_TEST_CASE(Controller_save_game_test)
     mq2->send_player_input(PlayerInputMessage(INPUT, 2, 2));
     mq2->send_player_input(PlayerInputMessage(EXIT, 0, 0));
     game2.run();
-    BOOST_CHECK_EQUAL(remove(config.save_path.c_str()), 0);
+    BOOST_REQUIRE_EQUAL(remove(config.save_path.c_str()), 0);
 
     int recieved2 = 0;
     while (recieved2 < 3)
@@ -418,11 +418,11 @@ BOOST_AUTO_TEST_CASE(Controller_save_game_test)
         {
             if (recieved2 == 0)
             {
-                BOOST_CHECK_EQUAL(gs.value().gameStateEnum, PREPARING);
+                BOOST_REQUIRE_EQUAL(gs.value().gameStateEnum, PREPARING);
             }
             else
             {
-                BOOST_CHECK_EQUAL(gs.value().gameStateEnum, PLAYING);
+                BOOST_REQUIRE_EQUAL(gs.value().gameStateEnum, PLAYING);
             }
             ++recieved2;
         }
@@ -433,7 +433,7 @@ BOOST_AUTO_TEST_CASE(Controller_save_game_test)
     {
         last_gs = mq2->check_for_game_state();
     } while (!last_gs);
-    BOOST_CHECK_EQUAL(last_gs.value().gameStateEnum, CIRCLE_WON);
+    BOOST_REQUIRE_EQUAL(last_gs.value().gameStateEnum, CIRCLE_WON);
 }
 
 //! CONTROLLER ///////////////
